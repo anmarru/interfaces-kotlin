@@ -175,11 +175,50 @@ fun DetallePedido(pedidoId: Int = 2, fecha: Date= Date(), precioTotal: Float = 2
     }
 }
 
+//EJERCICIO 4
+@Composable
+fun Calculadora(){
+    Column (modifier = Modifier.fillMaxSize().padding(35.dp),
+        //esto hace que los botones esten abajo
+        verticalArrangement = Arrangement.SpaceBetween,
+    ){
+        Text(
+            text = "0",
+            textAlign = TextAlign.End,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Column (){
+                filaBotones(listOf("1","2","3","+"))
+                filaBotones(listOf("4","5","6","-"))
+                filaBotones(listOf("7","8","9","*"))
+                filaBotones(listOf("c","0","=","/"))
+        }
+    }
+}
+
+@Composable
+fun filaBotones(botones: List<String>){
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(15.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            botones.forEach{
+                Button(onClick = {}, modifier = Modifier.weight(1f)) {
+                    Text(
+                        text= it
+                    )
+                }
+            }
+        }
+}
+
 
 @Preview(showBackground = true)//lo que se ve en el preview
 @Composable
 fun GreetingPreview() {
-    MesajeBienvenida()
-    DetallePedido()
-    campoRelleneble()
+    //MesajeBienvenida()
+    //DetallePedido()
+   // campoRelleneble()
+    Calculadora()
 }
