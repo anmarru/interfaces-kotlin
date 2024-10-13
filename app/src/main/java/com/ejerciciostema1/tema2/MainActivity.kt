@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -23,6 +26,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,13 +35,19 @@ import com.ejerciciostema1.tema2.ui.theme.Tema2Theme
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
+            MaterialTheme {
+                Surface {
+                    CatalogoPizzas()
+                    //Calculadora()
+                }
+            }
         }
     }
 }
@@ -67,7 +77,7 @@ fun Greeting(name: String) {
 }
 
 
-
+//EJERCICIO 1
 //@Preview(showBackground = true)
 @Composable
 fun MesajeBienvenida(pizzaria: String = "pizzeria" , direccion: String= "C/ Mayor 64", descripccion: String= "Pizzas, Pasta y bebidas "){
@@ -119,7 +129,7 @@ private fun campoRelleneble() {
     )
 }
 
-//funcion para detalle del pedido
+// EJERCICIO 2 funcion para detalle del pedido
 @Composable
 fun DetallePedido(pedidoId: Int = 2, fecha: Date= Date(), precioTotal: Float = 254.0f){
     Column (
@@ -127,14 +137,15 @@ fun DetallePedido(pedidoId: Int = 2, fecha: Date= Date(), precioTotal: Float = 2
 
     ){
         Spacer(modifier = Modifier.height(32.dp))
-        Text(
+
+        TextoCentrado(text="Detalle pedido")//llamo a la funcion auxiliar q centra el texto
+        /*Text(
             text ="Detalle de pedido",
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
-        )
+        )*/
         Spacer(modifier = Modifier.height(32.dp))
 
-    //Detalle del pedido
     Row (
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -156,26 +167,79 @@ fun DetallePedido(pedidoId: Int = 2, fecha: Date= Date(), precioTotal: Float = 2
         )
         Spacer(modifier = Modifier.height(32.dp))
         Row(
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            Button(onClick = {}) {
-                Text(
-                    text = "Cancelar Pedido "
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Button(onClick = {},
-                    modifier = Modifier.padding(32.dp)) {
-                    Text(
-                        text = "Confirmar pedido "
-                    )
-                }
+            Button(onClick = {},
+                modifier = Modifier
+                    .weight(1f)//el boton ocupa la mitad del ancho disponible
+                    .padding(end= 8.dp)
+            ) {
+                TextoCentrado(text = "Cancelar pedido")
             }
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Button(onClick = {},
+            modifier= Modifier
+                .weight(1f)
+                .padding(start = 8.dp)) {
+                //utilizo la funcion auxiliar
+                TextoCentrado(text= "confirmar pedido")
+            }
+
         }
     }
 }
 
+
+//EJERCICIO 3
+@Composable
+fun TextoCentrado(text: String){
+    Column (
+        modifier= Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center, //centro verticalmente
+        horizontalAlignment = Alignment.CenterHorizontally//centro horizontalmente
+    ){
+        Text(
+            text=text,
+            textAlign = TextAlign.Center
+        )
+    }
+
+}
+
 //EJERCICIO 4
+@Composable
+fun CatalogoPizzas(){
+    var pizzas by remember { mutableStateOf(listOf("Margarita", "4 quesos", "Barbacoa")) }
+
+    //layout principal
+    Column(
+        modifier = Modifier
+            //.padding(16.dp)
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.Start
+    ) {
+        //lista de las pizzas
+        for (pizza in pizzas){
+            Text(text= pizza)
+        }
+
+        Spacer(modifier =Modifier.height(2.dp))
+
+        //boton para agregar la pizza
+        Button(onClick = {
+            //generar nombre de pizza aleatorio
+            val nuevoNombrePizza= "pizza ${Random.nextInt(100,999)}"
+            pizzas = pizzas+ nuevoNombrePizza// agregar nueva pizza a la lista
+        }) {
+            Text(text= "Agregar Pizza ")
+        }
+    }
+}
+
+//EJERCICIO 5
 @Composable
 fun Calculadora(){
     Column (modifier = Modifier.fillMaxSize().padding(35.dp),
@@ -220,5 +284,6 @@ fun GreetingPreview() {
     //MesajeBienvenida()
     //DetallePedido()
    // campoRelleneble()
-    Calculadora()
+    //Calculadora()
+    //CatalogoPizzas()
 }
